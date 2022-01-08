@@ -1,0 +1,58 @@
+name: D
+
+on: 
+  repository_dispatch:
+    types: D
+
+#on: [workflow_dispatch]
+#  #push:
+#  #schedule:
+#  #  - cron:  '*/5 * * 5 *'
+
+jobs:
+  sj:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          path: main
+      - name: Check Main
+        run: |
+          cd ./main/
+          ls ${GITHUB_WORKSPACE}
+          echo ${GITHUB_WORKSPACE}
+          pwd
+          echo "main is done..."
+          
+      - name: av-d
+        uses: actions/checkout@v2
+        with:
+          repository: dsjena/av-d
+          token: ${{ secrets.SUPER_SECRET }}
+          path: av-d
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+      - name: Install dependencies
+        run: |
+          cd ./av-d/
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Actual Calculation
+        run: |
+          cd ./av-d/
+          #ls 
+          dtt=`TZ=IST-5:30 date`
+          echo ${GITHUB_WORKSPACE}
+          echo "${dtt}" 
+          echo "${dtt}" >> recieved.md
+          bash make-rdme.sh >> log.txt 2>&1
+          echo "Running hour..."
+          sh av-group-run.sh 
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git diff-index --quiet HEAD || git commit -m "Load YH" -a
+          git push
