@@ -1,8 +1,9 @@
 name: A
 
-on: 
-  repository_dispatch:
-    types: A
+on:
+  push:
+  #repository_dispatch:
+  #  types: A
 
 #on: [workflow_dispatch]
 #  #push:
@@ -50,7 +51,7 @@ jobs:
           echo "${dtt}" >> recieved.md
           bash make-rdme.sh >> log.txt 2>&1
           echo "Running hour..."
-          sh av-group-run.sh 
+          #sh av-group-run.sh 
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add .
