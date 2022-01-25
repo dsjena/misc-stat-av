@@ -3,7 +3,7 @@ name: A
 on:
   push:
   #repository_dispatch:
-  #  types: A
+  #  types: AB
 
 #on: [workflow_dispatch]
 #  #push:
